@@ -1,94 +1,201 @@
-// ===========================
-// resources/views/filament/widgets/quick-session-starter.blade.php
-// ===========================
-<x-filament-widgets::widget>
-    <x-filament::section>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <!-- Quick Stats -->
-            <div class="md:col-span-3">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <!-- Active Sessions -->
-                    <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-4 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-green-100 text-sm font-medium">Active Sessions</p>
-                                <p class="text-2xl font-bold">{{ $this->getActiveSessionsCount() }}</p>
-                            </div>
-                            <div class="bg-white bg-opacity-20 rounded-full p-3">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-7 4h12l-1-7H7l-1 7z"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
+{{-- 
+===========================
+resources/views/filament/widgets/quick-session-starter.blade.php
+Compact dan elegant session starter widget dengan modern design
+===========================
+--}}
 
-                    <!-- Today's Sessions -->
-                    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-4 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-blue-100 text-sm font-medium">Today's Sessions</p>
-                                <p class="text-2xl font-bold">{{ $this->getTodaySessionsCount() }}</p>
-                            </div>
-                            <div class="bg-white bg-opacity-20 rounded-full p-3">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                            </div>
-                        </div>
+<x-filament-widgets::widget class="fi-wi-stats-overview">
+    <div class="fi-wi-stats-overview-stats-ctn grid gap-6 lg:grid-cols-4">
+        {{-- Session Control Card --}}
+        <div class="fi-wi-stats-overview-stat relative rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+            <div class="grid gap-y-2">
+                {{-- Header with Icon --}}
+                <div class="flex items-center gap-2">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/10">
+                        <svg class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                        </svg>
                     </div>
-
-                    <!-- Working Equipment -->
-                    <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-4 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-orange-100 text-sm font-medium">Working Equipment</p>
-                                <p class="text-2xl font-bold">{{ $this->getWorkingEquipmentCount() }}</p>
-                            </div>
-                            <div class="bg-white bg-opacity-20 rounded-full p-3">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </div>
-                        </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Session Control</h3>
+                        <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">Quick Start</p>
                     </div>
                 </div>
 
-                <!-- Session Status Info -->
-                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Session Control Center</h3>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                        Manage loading operations and monitor equipment status in real-time. Start new sessions, track progress, and ensure operational efficiency.
-                    </p>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">
-                        Current Time: {{ now()->format('H:i:s') }} | 
-                        Current Shift: {{ 
-                            now()->hour >= 7 && now()->hour < 15 ? 'A (07:00-15:00)' : 
-                            (now()->hour >= 15 && now()->hour < 23 ? 'B (15:00-23:00)' : 'C (23:00-07:00)') 
-                        }}
-                    </div>
+                {{-- Action Button --}}
+                <div class="mt-4">
+                    {{ ($this->startSessionAction)(['size' => 'sm', 'outlined' => false]) }}
                 </div>
             </div>
+        </div>
 
-            <!-- Start Session Button -->
-            <div class="flex flex-col justify-center">
-                <div class="bg-gradient-to-br from-green-400 to-green-600 rounded-xl p-6 text-center text-white shadow-lg">
-                    <div class="mb-4">
-                        <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-7 4h12l-1-7H7l-1 7z"/>
+        {{-- Stats Cards --}}
+        <div class="fi-wi-stats-overview-stat relative rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+            <div class="grid gap-y-2">
+                <div class="flex items-center gap-2">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10">
+                        <svg class="h-4 w-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                         </svg>
-                        <h3 class="text-lg font-bold">Start New Session</h3>
-                        <p class="text-sm text-green-100">Begin loading operations</p>
                     </div>
-                    
-                    {{ $this->startSessionAction }}
-                    
-                    <div class="mt-4 text-xs text-green-100">
-                        Quick setup with area selection and equipment assignment
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Active Sessions</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $this->getActiveSessionsCount() }}</p>
                     </div>
                 </div>
             </div>
         </div>
-    </x-filament::section>
 
-    <x-filament-actions::modals />
+        <div class="fi-wi-stats-overview-stat relative rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+            <div class="grid gap-y-2">
+                <div class="flex items-center gap-2">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/10">
+                        <svg class="h-4 w-4 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5a2.25 2.25 0 0 0 2.25-2.25m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5a2.25 2.25 0 0 1 2.25 2.25v7.5" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Today's Sessions</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $this->getTodaySessionsCount() }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fi-wi-stats-overview-stat relative rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
+            <div class="grid gap-y-2">
+                <div class="flex items-center gap-2">
+                    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500/10">
+                        <svg class="h-4 w-4 text-yellow-600 dark:text-yellow-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 1-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m6 4.5v-3.75m-6 3.75h6m6-6V9.75a1.125 1.125 0 0 1 1.125-1.125H21M15 10.5h3.75M15 10.5v3.75m3.75-3.75v3.75" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Working Equipment</p>
+                        <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $this->getWorkingEquipmentCount() }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Session Information Panel (Compact) --}}
+    @if($this->getActiveSessionsCount() > 0)
+    <div class="mt-6 rounded-lg bg-green-50 p-4 dark:bg-green-900/20">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </div>
+            <div class="ml-3 flex-1">
+                <h3 class="text-sm font-medium text-green-800 dark:text-green-200">
+                    Operations Active
+                </h3>
+                <div class="mt-1 text-sm text-green-700 dark:text-green-300">
+                    <p>{{ $this->getActiveSessionsCount() }} loading session(s) currently in progress. Monitor progress in Loading Sessions.</p>
+                </div>
+            </div>
+            <div class="ml-3">
+                <a href="/admin/loading-sessions" 
+                   class="inline-flex items-center rounded-md bg-green-100 px-2.5 py-1.5 text-xs font-medium text-green-800 hover:bg-green-200 dark:bg-green-800 dark:text-green-100 dark:hover:bg-green-700">
+                    View Sessions
+                    <svg class="ml-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    {{-- Current Shift Info (Compact) --}}
+    <div class="mt-4 flex items-center justify-between rounded-lg bg-gray-50 px-4 py-2 dark:bg-gray-800/50">
+        <div class="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <span>Current Time: {{ now()->format('H:i:s') }}</span>
+            <span class="text-gray-400">|</span>
+            <span>Shift: 
+                @php
+                    $hour = now()->hour;
+                    if ($hour >= 7 && $hour < 15) {
+                        echo 'A (07:00-15:00)';
+                    } elseif ($hour >= 15 && $hour < 23) {
+                        echo 'B (15:00-23:00)';
+                    } else {
+                        echo 'C (23:00-07:00)';
+                    }
+                @endphp
+            </span>
+        </div>
+        
+        <div class="flex items-center space-x-2">
+            <div class="h-2 w-2 rounded-full bg-green-500"></div>
+            <span class="text-xs text-gray-500 dark:text-gray-400">System Online</span>
+        </div>
+    </div>
+
+    {{-- Auto-refresh indicator --}}
+    <div class="mt-2 flex justify-center">
+        <span class="text-xs text-gray-400 dark:text-gray-500" wire:poll.30s>
+            Auto-refresh: 30s
+        </span>
+    </div>
 </x-filament-widgets::widget>
+
+{{-- Custom Styles --}}
+@push('styles')
+<style>
+    /* Widget hover animations */
+    .fi-wi-stats-overview-stat {
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .fi-wi-stats-overview-stat:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Pulse animation untuk online indicator */
+    @keyframes pulse-green {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    
+    .animate-pulse-green {
+        animation: pulse-green 2s infinite;
+    }
+</style>
+@endpush
+
+{{-- JavaScript untuk dynamic updates --}}
+@push('scripts')
+<script>
+    // Update current time setiap detik
+    setInterval(function() {
+        const timeElements = document.querySelectorAll('[data-time]');
+        timeElements.forEach(element => {
+            element.textContent = 'Current Time: ' + new Date().toLocaleTimeString('en-US', {hour12: false});
+        });
+    }, 1000);
+
+    // Handle session started event
+    document.addEventListener('session-started', function(event) {
+        // Show success notification
+        window.dispatchEvent(new CustomEvent('notify', {
+            detail: {
+                type: 'success',
+                message: `Loading session ${event.detail.sessionCode} started successfully!`
+            }
+        }));
+        
+        // Refresh widget setelah 2 detik
+        setTimeout(() => {
+            window.livewire.find('{{ $this->getId() }}').call('$refresh');
+        }, 2000);
+    });
+</script>
+@endpush

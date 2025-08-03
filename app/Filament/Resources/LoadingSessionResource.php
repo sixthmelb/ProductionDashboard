@@ -27,6 +27,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Actions\Action;
 use Filament\Notifications\Notification;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class LoadingSessionResource extends Resource
 {
@@ -43,6 +44,26 @@ class LoadingSessionResource extends Resource
     protected static ?int $navigationSort = 2;
     
     protected static ?string $navigationGroup = 'Operations';
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()->hasAnyRole(['superadmin', 'mcr']);
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasAnyRole(['superadmin', 'mcr', 'manager']);
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return auth()->user()->hasAnyRole(['superadmin', 'mcr']);
+    }
+
+    public static function canDelete(Model $record): bool
+    {
+        return auth()->user()->hasRole('superadmin');
+    }
 
     public static function form(Form $form): Form
     {

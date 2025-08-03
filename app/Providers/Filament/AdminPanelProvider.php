@@ -40,6 +40,10 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
                 \App\Filament\Widgets\QuickSessionStarter::class,
+                // TAMBAHAN: Dashboard widgets untuk manager dashboard
+                \App\Filament\Widgets\ProductionMetricsWidget::class,
+                \App\Filament\Widgets\EquipmentStatusWidget::class,
+                \App\Filament\Widgets\PerformanceChartsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
